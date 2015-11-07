@@ -16,7 +16,7 @@ MainGame::~MainGame()
 void MainGame::run()
 {
     initSystems();
-    _sprite.init( -1.0f, -1.0f, 1.0f, 1.0f );
+    _sprite.init( -1.0f, -1.0f, 2.0f, 2.0f );
     gameLoop();
 }
 
@@ -45,7 +45,7 @@ void MainGame::initSystems()
     }
 
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-    glClearColor( 1.0f, 0, 1.0f, 1.0f );
+    glClearColor( 1.0f, 0.5f, 1.0f, 1.0f );
 
     initShaders();
 }
@@ -54,6 +54,7 @@ void MainGame::initShaders()
 {
     _color_program.compileShaders( "Shaders/colorShading.vert.shad", "Shaders/colorShading.frag.shad" );
     _color_program.addAttribute( "vertexPosition" );
+    _color_program.addAttribute( "vertexColor" );
     _color_program.linkShaders();
 }
 

@@ -3,10 +3,10 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <string>
+#include "Sprite.h"
+#include "GLSLProgram.h"
 
 enum class GameState { PLAY, EXIT };
-
-void fatalError( std::string error_string );
 
 class MainGame
 {
@@ -18,6 +18,7 @@ public:
 
 private:
     void initSystems();
+    void initShaders();
     void gameLoop();
     void processInput();
     void drawGame();
@@ -26,5 +27,9 @@ private:
     int _screen_width;
     int _screen_height;
     GameState _currentGameState;
+
+    Sprite _sprite;
+
+    GLSLProgram _color_program;
 };
 

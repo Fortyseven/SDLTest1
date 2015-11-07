@@ -1,15 +1,5 @@
 #include "MainGame.h"
-
-void fatalError( std::string error_string )
-{
-    std::cout << error_string << std::endl;
-    std::cout << "Enter any key to quit...";
-
-    int tmp;
-    std::cin >> tmp;
-    SDL_Quit();
-    exit( -1 );
-}
+#include "Errors.h"
 
 MainGame::MainGame()
 {
@@ -19,15 +9,14 @@ MainGame::MainGame()
     _currentGameState = GameState::PLAY;
 }
 
-
 MainGame::~MainGame()
 {
 }
 
-
 void MainGame::run()
 {
     initSystems();
+    _sprite.init( -1.0f, -1.0f, 1.0f, 1.0f );
     gameLoop();
 }
 
@@ -57,6 +46,15 @@ void MainGame::initSystems()
 
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     glClearColor( 1.0f, 0, 1.0f, 1.0f );
+
+    initShaders();
+}
+
+void MainGame::initShaders()
+{
+    _color_program.compileShaders( "Shaders/colorShading.vert.shad", "Shaders/colorShading.frag.shad" );
+    _color_program.addAttribute( "vertexPosition" );
+    _color_program.linkShaders();
 }
 
 void MainGame::gameLoop()
@@ -88,16 +86,9 @@ void MainGame::drawGame()
     glClearDepth( 1.0 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    glEnableClientState( GL_COLOR_ARRAY );
-    glBegin( GL_TRIANGLES );
-
-    glColor3f( 1, 0.8, 0 );
-    glVertex2f( 0, 0 );
-    glVertex2f( 0, 500 );
-    glVertex2f( 500, 500 );
-
-
-    glEnd();
+    _color_program.use();
+    _sprite.draw();
+    _color_program.remove();
 
     SDL_GL_SwapWindow( _window );
 }
